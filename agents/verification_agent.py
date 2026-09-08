@@ -1,13 +1,14 @@
 import json  # Import for JSON serialization
 from ibm_watsonx_ai.foundation_models import ModelInference
-from ibm_watsonx_ai import Credentials, APIClient
+from ibm_watsonx_ai import Credentials
 from typing import Dict, List
 from langchain.schema import Document
+from config.settings import settings
 
 credentials = Credentials(
-                   url = "https://us-south.ml.cloud.ibm.com",
+                   url=settings.WATSONX_URL,
+                   api_key=settings.WATSONX_API_KEY,
                   )
-client = APIClient(credentials)
 
 class VerificationAgent:
     def __init__(self):
@@ -19,7 +20,7 @@ class VerificationAgent:
         self.model = ModelInference(
             model_id="ibm/granite-4-h-small", 
             credentials=credentials,
-            project_id="skills-network",
+            project_id=settings.WATSONX_PROJECT_ID,
             params={
                 "max_tokens": 200,            # Adjust based on desired response length
                 "temperature": 0.0,           # Remove randomness for consistency
