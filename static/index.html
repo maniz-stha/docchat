@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Ask precise questions of your documents.">
+    <title>DocChat — Document Q&amp;A</title>
+    <link rel="stylesheet" href="/static/style.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/">DocChat</a>
+      <div class="header-actions"><span>Document Q&amp;A</span><button id="new-session" type="button">New session</button></div>
+    </header>
+    <main>
+      <section class="intro">
+        <p class="eyebrow">DOCUMENT RESEARCH</p>
+        <h1>Ask better questions of your documents.</h1>
+        <p>Upload your source material, then get a researched answer with a verification report.</p>
+      </section>
+      <form id="question-form" class="workspace">
+        <section class="panel source-panel" aria-labelledby="sources-title">
+          <h2 id="sources-title"><span>1.</span> Sources</h2>
+          <label id="drop-zone" class="drop-zone" for="files">
+            <input id="files" name="files" type="file" accept=".pdf,.docx,.txt,.md" multiple>
+            <span class="file-icon" aria-hidden="true">⌑</span>
+            <strong>Drop documents here or <em>browse</em></strong>
+            <small>PDF, DOCX, TXT, MD · 50 MB each, 200 MB total</small>
+          </label>
+          <ul id="file-list" class="file-list" aria-label="Selected documents"></ul>
+          <div class="question-group">
+            <label for="question"><span>2.</span> Your question</label>
+            <textarea id="question" name="question" rows="5" placeholder="What would you like to know about these documents?" required></textarea>
+          </div>
+          <button id="submit" type="submit">Ask question <span aria-hidden="true">→</span></button>
+          <p id="form-status" class="form-status" role="status" aria-live="polite"></p>
+        </section>
+        <section class="panel answer-panel" aria-labelledby="answer-title">
+          <div id="empty-answer" class="empty-state">
+            <span class="empty-icon" aria-hidden="true">⌁</span>
+            <h2 id="answer-title">Your answer will appear here</h2>
+            <p>Start by uploading one or more documents and asking a focused question.</p>
+          </div>
+          <article id="result" hidden>
+            <div class="result-heading">
+              <h2>Answer</h2>
+              <button id="copy-answer" class="copy-button" type="button">Copy</button>
+            </div>
+            <div id="answer" class="answer" aria-live="polite"></div>
+            <section class="answer-sources" aria-labelledby="sources-used-title">
+              <h3 id="sources-used-title">Sources used for this answer</h3>
+              <ul id="answer-sources"></ul>
+            </section>
+            <details class="verification" open>
+              <summary><span class="check" aria-hidden="true">✓</span><span><strong>Verification</strong><small>Review the evidence check</small></span></summary>
+              <div id="verification-text" class="verification-text"></div>
+            </details>
+          </article>
+        </section>
+      </form>
+    </main>
+    <script src="/static/app.js"></script>
+  </body>
+</html>

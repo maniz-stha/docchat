@@ -1,11 +1,11 @@
 from langchain_community.vectorstores import Chroma
-from langchain_openai import OpenAIEmbeddings
 from ibm_watsonx_ai.metanames import EmbedTextParamsMetaNames
 from langchain_ibm import WatsonxEmbeddings
 from langchain_community.retrievers import BM25Retriever
 from langchain.retrievers import EnsembleRetriever
 from config.settings import settings
 import logging
+from uuid import uuid4
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +33,7 @@ class RetrieverBuilder:
             vector_store = Chroma.from_documents(
                 documents=docs,
                 embedding=self.embeddings,
-                persist_directory=settings.CHROMA_DB_PATH
+                collection_name=f"docchat-{uuid4().hex}",
             )
             logger.info("Vector store created successfully.")
             
