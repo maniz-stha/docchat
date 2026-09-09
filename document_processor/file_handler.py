@@ -59,13 +59,17 @@ class DocumentProcessor:
         return all_chunks
 
     def _process_file(self, file) -> List:
-        """Original processing logic with Docling"""
-        if not file.name.endswith(('.pdf', '.docx', '.txt', '.md')):
+        """Extract text files directly and use Docling for rich documents."""
+        suffix = Path(file.name).suffix.lower()
+        if suffix not in constants.ALLOWED_TYPES:
             logger.warning(f"Skipping unsupported file type: {file.name}")
             return []
 
-        converter = DocumentConverter()
-        markdown = converter.convert(file.name).document.export_to_markdown()
+        if suffix in (".txt", ".md"):
+            markdown = Path(file.name).read_text(encoding="utf-8", errors="replace")
+        else:
+            markdown = DocumentConverter().convert(file.name).document.export_to_markdown()
+
         splitter = MarkdownHeaderTextSplitter(self.headers)
         return splitter.split_text(markdown)
 
