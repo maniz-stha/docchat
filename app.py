@@ -33,6 +33,11 @@ def index() -> FileResponse:
     return FileResponse(ROOT / "static" / "index.html")
 
 
+@app.get("/how-it-works", response_class=FileResponse)
+def how_it_works() -> FileResponse:
+    return FileResponse(ROOT / "static" / "how-it-works.html")
+
+
 @app.post("/api/ask")
 async def ask(
     request: Request,

@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="How DocChat answers questions from your documents.">
+    <title>How it works — DocChat</title>
+    <link rel="stylesheet" href="/static/style.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/">DocChat</a>
+      <div class="header-actions"><a href="/">Document Q&amp;A</a></div>
+    </header>
+    <main class="how-it-works">
+      <p class="eyebrow">DOCUMENT RESEARCH</p>
+      <h1>How it works</h1>
+      <p>DocChat uses a retrieval-augmented generation pipeline: it extracts your document text, retrieves the most relevant chunks, generates an answer from that context, then checks the result.</p>
+      <section class="steps" aria-label="How DocChat works">
+        <article class="step"><span class="step-number">1</span><div><h2>Validate and extract</h2><p>The API accepts PDF, DOCX, TXT, and Markdown files, limiting each file to 50 MB and an upload to 200 MB. TXT and Markdown are read directly; PDF and DOCX are converted to Markdown with Docling. The extracted Markdown is split at level-one and level-two headings into retrievable chunks.</p><p class="tech-note">Chunks are SHA-256 keyed and cached on disk for seven days, so unchanged documents do not need extraction again.</p></div></article>
+        <article class="step"><span class="step-number">2</span><div><h2>Build hybrid retrieval</h2><p>For a new document set, DocChat creates a Chroma vector store using IBM watsonx <code>ibm/slate-125m-english-rtrvr-v2</code> embeddings and a BM25 keyword retriever. An ensemble combines their results with 40% BM25 and 60% vector weighting, returning up to 10 vector matches.</p><p class="tech-note">The resulting retriever is kept in memory for the browser session and rebuilt when the uploaded files change.</p></div></article>
+        <article class="step"><span class="step-number">3</span><div><h2>Generate from retrieved context</h2><p>Your question is sent to the hybrid retriever first. The top chunks are joined into context for IBM watsonx Granite <code>ibm/granite-4-h-small</code>, which is instructed to answer only from that context. The answer and uploaded source names are returned to the page.</p></div></article>
+        <article class="step"><span class="step-number">4</span><div><h2>Verify and retry once</h2><p>A separate Granite pass evaluates whether the answer is supported by the retrieved context, identifies unsupported claims and contradictions, and checks relevance. If the report says <code>Supported: NO</code> or <code>Relevant: NO</code>, DocChat repeats research once; after that it returns the answer and report.</p></div></article>
+        <article class="step"><span class="step-number">5</span><div><h2>Reset the session</h2><p>The server sets an HTTP-only, same-site session cookie. Selecting New session clears that session’s in-memory retriever and deletes the cookie; restarting the server also clears active sessions.</p></div></article>
+      </section>
+      <a class="back-link" href="/">← Start a document Q&amp;A</a>
+    </main>
+  </body>
+</html>
